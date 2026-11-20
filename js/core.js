@@ -17,6 +17,7 @@ window.Casino = (function () {
     muted: false,
     volume: 0.7,
     lastDaily: 0,
+    progression: { mode: "loss" },
     stats: { rounds: 0, biggestWin: 0, wagered: 0, won: 0 }
   };
 
@@ -42,6 +43,13 @@ window.Casino = (function () {
         state.volume = Math.min(1, Math.max(0, saved.volume));
       }
       state.lastDaily = Number(saved.lastDaily) || 0;
+
+      if (saved.progression && typeof saved.progression === "object") {
+        const mode = saved.progression.mode;
+        if (["loss", "win", "every", "off"].indexOf(mode) !== -1) {
+          state.progression.mode = mode;
+        }
+      }
 
       if (saved.stats && typeof saved.stats === "object") {
         Object.keys(state.stats).forEach((key) => {
@@ -414,6 +422,174 @@ window.Casino = (function () {
     renderHistory(game);
   }
 
+  /* ---------------- bet ladder ---------------- */
+
+  const LADDER = [10, 25, 50, 100, 250, 500, 1000];
+  const LADDER_MODES = ["loss", "win", "every", "off"];
+  const MODE_NAMES = {
+    loss: "Rise on loss",
+    win: "Rise on win",
+    every: "Every round",
+    off: "Off"
+  };
+  const GAME_LABELS = {
+    slots: "Slots",
+    blackjack: "Blackjack",
+    roulette: "Roulette",
+    mines: "Mines"
+  };
+  const CHIP_GAMES = {
+    "slots-chips": "slots",
+    "bj-chips": "blackjack",
+    "roulette-chips": "roulette",
+    "mines-chips": "mines"
+  };
+
+  const progress = {};
+  const controllers = {};
+  let suppressChipPick = false;
+
+  function ladderIndex(value) {
+    const amount = Math.round(Number(value) || 0);
+    const exact = LADDER.indexOf(amount);
+    if (exact !== -1) return exact;
+    for (let i = 0; i < LADDER.length; i++) {
+      if (LADDER[i] >= amount) return i;
+    }
+    return LADDER.length - 1;
+  }
+
+  function progressionState(game) {
+    if (!progress[game]) {
+      const ctrl = controllers[game];
+      const initial = ctrl ? ctrl.get() : LADDER[0];
+      progress[game] = { start: initial, current: initial };
+    }
+    return progress[game];
+  }
+
+  function renderProgression() {
+    const bar = $("#ladder-bar");
+    if (!bar) return;
+
+    $$("[data-mode]", bar).forEach(function (btn) {
+      const on = btn.dataset.mode === state.progression.mode;
+      btn.classList.toggle("active", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    const activeTab = $(".tab.active");
+    const game = activeTab ? activeTab.dataset.game : "slots";
+    const value = progressionState(game).current;
+
+    $$(".ladder-step", bar).forEach(function (step, i) {
+      step.classList.toggle("active", i === ladderIndex(value));
+      step.classList.toggle("passed", i < ladderIndex(value));
+    });
+
+    const status = $("#ladder-status", bar);
+    if (status) {
+      status.textContent =
+        (GAME_LABELS[game] || "Game") + " next bet · " + fmt(value) + " ฿" +
+        (value >= 1000 ? " · MAX" : "");
+    }
+  }
+
+  function registerChips(game, controller) {
+    if (!game || !controller) return;
+    controllers[game] = controller;
+    progressionState(game);
+  }
+
+  function chipPicked(game, value) {
+    if (suppressChipPick || !game || value == null) return;
+    const st = progressionState(game);
+    st.start = Math.round(Number(value) || 0);
+    st.current = st.start;
+    renderProgression();
+  }
+
+  function setChip(game, value) {
+    const ctrl = controllers[game];
+    if (!ctrl) return;
+    suppressChipPick = true;
+    try {
+      ctrl.set(value);
+    } finally {
+      suppressChipPick = false;
+    }
+    progressionState(game).current = value;
+    renderProgression();
+  }
+
+  function completeRound(game, outcome) {
+    const st = progressionState(game);
+    const before = st.current;
+    const mode = state.progression.mode;
+    let next = st.current;
+
+    if (mode !== "off") {
+      const at = ladderIndex(st.current);
+      const up = LADDER[Math.min(at + 1, LADDER.length - 1)];
+
+      if (mode === "loss") {
+        if (outcome === "loss") next = up;
+        else if (outcome === "win") next = st.start;
+      } else if (mode === "win") {
+        if (outcome === "win") next = up;
+        else if (outcome === "loss") next = st.start;
+      } else {
+        next = up;
+      }
+    }
+
+    setChip(game, next);
+
+    if (next === 1000 && before < 1000 && mode !== "off") {
+      toast("Bet ladder reached the top: 1,000 ฿ per round.", "win", 3000);
+    }
+
+    return next;
+  }
+
+  function initProgression() {
+    const track = $("#ladder-track");
+    if (track) {
+      track.innerHTML = "";
+      LADDER.forEach(function (value) {
+        const step = document.createElement("span");
+        step.className = "ladder-step";
+        step.textContent = value === 1000 ? "1k" : fmt(value);
+        track.appendChild(step);
+      });
+    }
+
+    const bar = $("#ladder-bar");
+    if (bar) {
+      $$("[data-mode]", bar).forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const mode = btn.dataset.mode;
+          if (LADDER_MODES.indexOf(mode) === -1) return;
+          state.progression.mode = mode;
+          save();
+          sfx.click();
+          renderProgression();
+          toast("Bet ladder: " + MODE_NAMES[mode], "info", 1800);
+        });
+      });
+    }
+
+    renderProgression();
+  }
+
+  const progression = {
+    register: registerChips,
+    picked: chipPicked,
+    complete: completeRound,
+    render: renderProgression,
+    ladder: LADDER.slice()
+  };
+
   /* ---------------- chip selector ---------------- */
 
   function bindChips(container, initial, onChange) {
@@ -426,7 +602,13 @@ window.Casino = (function () {
     }
 
     const buttons = $$("[data-chip]", container);
+    const game = CHIP_GAMES[container.id] || null;
     let value = initial;
+
+    function notify() {
+      if (onChange) onChange(value);
+      if (game) chipPicked(game, value);
+    }
 
     function paint() {
       buttons.forEach(function (btn) {
@@ -434,7 +616,7 @@ window.Casino = (function () {
         btn.classList.toggle("active", active);
         btn.setAttribute("aria-pressed", active ? "true" : "false");
       });
-      if (onChange) onChange(value);
+      notify();
     }
 
     buttons.forEach(function (btn) {
@@ -446,9 +628,7 @@ window.Casino = (function () {
       });
     });
 
-    paint();
-
-    return {
+    const api = {
       get: function () { return value; },
       set: function (next) {
         value = Number(next);
@@ -458,6 +638,11 @@ window.Casino = (function () {
         buttons.forEach(function (btn) { btn.disabled = !!disabled; });
       }
     };
+
+    if (game) registerChips(game, api);
+    paint();
+
+    return api;
   }
 
   /* ---------------- init ---------------- */
@@ -481,6 +666,7 @@ window.Casino = (function () {
     renderStats();
     updateMuteButton();
     renderDaily();
+    initProgression();
 
     if (dom.mute) dom.mute.addEventListener("click", toggleMute);
     if (dom.daily) dom.daily.addEventListener("click", claimDaily);
@@ -534,6 +720,7 @@ window.Casino = (function () {
     shake: shake,
     pushHistory: pushHistory,
     bindChips: bindChips,
+    progression: progression,
     sfx: sfx
   };
 })();

@@ -41,6 +41,8 @@
       if (game === "roulette" && window.Roulette && window.Roulette.refresh) {
         window.Roulette.refresh();
       }
+
+      if (C.progression) C.progression.render();
     }
 
     tabs.forEach(function (tab) {

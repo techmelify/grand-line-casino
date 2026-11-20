@@ -172,6 +172,8 @@ window.Slots = (function () {
       setMessage("No match. The sea keeps its treasure this time.");
     }
 
+    C.progression.complete("slots", net > 0 ? "win" : "loss");
+
     if (isTriple) {
       setTimeout(function () { els.payline.classList.remove("win"); }, 2200);
     }

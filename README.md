@@ -23,6 +23,7 @@ Open `index.html` in a browser and set sail.
 - **Responsive layout** — desktop, tablet, phone; roulette table scrolls horizontally on small screens.
 - **Accessibility touches** — keyboard-navigable tabs, live regions for results, reduced-motion support, and shortcuts (Space to play the active game; H/S/D at blackjack).
 - **Share-ready & installable** — social preview image, PWA manifest, app icons, a small offline shell, a sound-volume slider, and a rolling "last 10 results" strip for each game.
+- **Bet ladder** — every game follows the chip values `10 → 25 → 50 → 100 → 250 → 500 → 1,000` and caps at 1,000 ฿. Pick a chip to set your starting stake, then choose **Rise on loss** (default; resets after a win), **Rise on win**, **Every round**, or **Off** in the ladder bar above the tabs. The active game's next stake is highlighted in the ladder.
 
 ## Project layout
 

@@ -275,6 +275,18 @@ window.Roulette = (function () {
       els.result.className = "roulette-result show result-" + color;
     }
 
+    const ladderBet = C.progression.complete("roulette", net > 0 ? "win" : "loss");
+    if (C.state.progression.mode !== "off") {
+      const carryZones = Object.keys(bets);
+      bets = {};
+      carryZones.forEach(function (zone) { bets[zone] = ladderBet; });
+      if (betTotal() > C.state.berries) {
+        bets = {};
+        C.toast("The next ladder stake is more than your chest. Place a smaller bet.", "warn");
+      }
+      renderBets();
+    }
+
     spinning = false;
     setLocked(false);
   }

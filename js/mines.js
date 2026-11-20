@@ -167,6 +167,7 @@ window.Mines = (function () {
     C.toast("BOOM! The Marines got you. " + C.fmt(bet) + " ฿ lost.", "lose");
     C.pushHistory("mines", "💥 -" + C.fmt(bet), "loss");
     setMessage("Boom. The Marines take the chest. You found " + picks + " treasure tile" + (picks === 1 ? "" : "s") + ".");
+    C.progression.complete("mines", "loss");
     updateHud();
     if (els.start) els.start.textContent = "New round";
   }
@@ -213,6 +214,7 @@ window.Mines = (function () {
     C.pushHistory("mines", "💎 +" + C.fmt(payout) + " · " + mult.toFixed(2) + "×", "win");
     C.reward(payout);
     C.recordWin(payout - bet);
+    C.progression.complete("mines", "win");
     revealMines(-1);
     disableAllTiles();
 

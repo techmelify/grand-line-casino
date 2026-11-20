@@ -170,6 +170,23 @@
         <p class="section-sub">Every game runs on Berries from your chest. Win big, lose it all, or claim a daily bounty to get back on deck.</p>
       </div>
 
+      <div class="ladder-bar" id="ladder-bar" aria-label="Bet ladder controls">
+        <div class="ladder-info">
+          <span class="ladder-badge" aria-hidden="true">⚡</span>
+          <div class="ladder-copy">
+            <strong>Bet ladder</strong>
+            <span id="ladder-status">Slots next bet · 50 ฿</span>
+          </div>
+        </div>
+        <div class="ladder-track" id="ladder-track" aria-label="Bet ladder steps"></div>
+        <div class="ladder-modes" role="group" aria-label="Bet ladder rule">
+          <button type="button" data-mode="loss" aria-pressed="true" title="Raise after a loss, reset to your chosen chip after a win">Rise on loss</button>
+          <button type="button" data-mode="win" aria-pressed="false" title="Raise after a win, reset to your chosen chip after a loss">Rise on win</button>
+          <button type="button" data-mode="every" aria-pressed="false" title="Raise after every round">Every round</button>
+          <button type="button" data-mode="off" aria-pressed="false" title="Keep your chosen chip every round">Off</button>
+        </div>
+      </div>
+
       <div class="tabbar" role="tablist" aria-label="Casino games">
         <button class="tab active" id="tab-slots" role="tab" aria-selected="true" aria-controls="panel-slots" data-game="slots">
           <span class="tab-icon" aria-hidden="true">🎰</span> Devil Fruit Slots
@@ -417,6 +434,7 @@
       <div class="rule-note">
         <span aria-hidden="true">🪙</span>
         <p>New captains start with <strong>5,000 ฿</strong>. Claim a daily bounty of <strong>1,000 ฿</strong>, and if you're ever shipwrecked below 100 ฿, you can claim an emergency 500 ฿. Progress is stored in your browser.</p>
+        <p>⚡ <strong>Bet ladder:</strong> the chip you pick is your starting stake. It then follows <strong>10 → 25 → 50 → 100 → 250 → 500 → 1,000</strong> and stops at 1,000. Use the ladder bar above the games to choose when it rises.</p>
       </div>
     </div>
     <div class="modal-foot">

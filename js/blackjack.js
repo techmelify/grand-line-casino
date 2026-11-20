@@ -351,6 +351,10 @@ window.Blackjack = (function () {
 
     inRound = false;
     busy = false;
+    C.progression.complete(
+      "blackjack",
+      outcome === "win" ? "win" : outcome === "push" ? "push" : "loss"
+    );
     updateControls();
   }
 
