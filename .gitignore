@@ -1,0 +1,15 @@
+# Vercel local build/link metadata
+.vercel/
+
+# Dependencies
+node_modules/
+
+# Logs and local env files
+*.log
+.env
+.env.*
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+*.swp

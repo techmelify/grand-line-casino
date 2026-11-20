@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grand Line Casino — A One Piece Fan Casino</title>
+  <meta name="description" content="A pirate-themed play-money casino with Luffy and Ace. Spin Devil Fruit slots, beat the dealer at blackjack, spin the Grand Line roulette wheel, and dig for bounty. No real money, no purchases." />
+  <meta name="theme-color" content="#04121c" />
+  <meta name="color-scheme" content="dark" />
+  <meta property="og:title" content="Grand Line Casino — A One Piece Fan Casino" />
+  <meta property="og:description" content="Join Luffy and Ace at a fan-made, play-money casino: Devil Fruit slots, pirate blackjack, a Grand Line roulette wheel, and bounty mining. No purchases and no real prizes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://grand-line-casino.vercel.app/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Grand Line Casino — a pirate-themed play-money casino" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://grand-line-casino.vercel.app/assets/og-image.png" />
+  <meta name="twitter:image:alt" content="Grand Line Casino — a pirate-themed play-money casino" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23f5c96b'/%3E%3Ctext x='50' y='70' font-size='58' text-anchor='middle'%3E%E2%98%A0%3C/text%3E%3C/svg%3E" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="sea-bg" aria-hidden="true"></div>
+
+  <noscript>
+    <div class="noscript">⚓ The Grand Line runs on JavaScript. Enable it to spin the reels and deal the cards.</div>
+  </noscript>
+
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Grand Line Casino home">
+      <span class="brand-mark" aria-hidden="true">☠</span>
+      <span class="brand-text">
+        <span class="brand-title">Grand Line</span>
+        <span class="brand-sub">Casino</span>
+      </span>
+    </a>
+
+    <nav class="topnav" aria-label="Game shortcuts">
+      <a href="#games" data-jump="slots">Slots</a>
+      <a href="#games" data-jump="blackjack">Blackjack</a>
+      <a href="#games" data-jump="roulette">Roulette</a>
+      <a href="#games" data-jump="mines">Bounty Mines</a>
+    </nav>
+
+    <div class="wallet" id="wallet">
+      <span class="wallet-coin" aria-hidden="true">🪙</span>
+      <div class="wallet-copy">
+        <span class="wallet-label">Berries</span>
+        <strong class="wallet-amount"><span id="wallet-berries">5,000</span> <span class="wallet-unit">฿</span></strong>
+      </div>
+      <button class="btn-daily" id="daily-btn" type="button">Claim +1,000 ฿</button>
+      <div class="volume-control">
+        <span class="volume-icon" aria-hidden="true">🔈</span>
+        <input id="volume-slider" class="volume-slider" type="range" min="0" max="100" value="70" aria-label="Sound volume" />
+      </div>
+      <button class="icon-btn" id="mute-btn" type="button" aria-label="Mute sound" title="Mute sound">🔊</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">Straw Hat Entertainment presents</p>
+        <h1 class="hero-title">Grand Line<span class="line2">Casino</span></h1>
+        <p class="lede">Spin the reels, outsmart the dealer, and chase a bigger bounty across the four seas. The treasure is pretend — the thrill is real.</p>
+
+        <div class="hero-actions">
+          <a class="btn btn-gold btn-lg" href="#games">Set sail <span aria-hidden="true">⚓</span></a>
+          <button class="btn btn-ghost btn-lg" id="how-btn" type="button">How to play</button>
+        </div>
+
+        <ul class="hero-stats">
+          <li><span class="stat-value" id="stat-biggest">0 ฿</span><span class="stat-label">Biggest win</span></li>
+          <li><span class="stat-value" id="stat-rounds">0</span><span class="stat-label">Rounds sailed</span></li>
+          <li><span class="stat-value" id="stat-wagered">0 ฿</span><span class="stat-label">Total wagered</span></li>
+        </ul>
+
+        <p class="play-note">Play money only · No purchases · No real prizes</p>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="sunset-glow"></div>
+        <div class="poster-stack">
+          <div class="poster poster-ace">
+            <div class="wanted">
+              <div class="wanted-top">Wanted</div>
+              <div class="wanted-face"><img src="assets/ace-manga.jpg" alt="" width="736" height="595" decoding="async" /></div>
+              <div class="wanted-name">Portgas D. Ace</div>
+              <div class="wanted-sub">“Fire Fist” · Whitebeard Pirates</div>
+              <div class="wanted-reward"><span class="unit">฿</span>550,000,000</div>
+              <div class="wanted-stamp">Grand Line</div>
+            </div>
+          </div>
+          <div class="poster poster-luffy">
+            <div class="wanted">
+              <div class="wanted-top">Wanted</div>
+              <div class="wanted-face"><img src="assets/luffy-manga.jpg" alt="" width="736" height="736" decoding="async" /></div>
+              <div class="wanted-name">Monkey D. Luffy</div>
+              <div class="wanted-sub">“Straw Hat” · Captain</div>
+              <div class="wanted-reward"><span class="unit">฿</span>3,000,000,000</div>
+              <div class="wanted-stamp">Grand Line</div>
+            </div>
+          </div>
+        </div>
+        <div class="live-bounty">
+          <span class="live-bounty-label">Your live bounty</span>
+          <strong class="live-bounty-value"><span class="unit">฿</span><span id="wanted-reward">5,000</span></strong>
+        </div>
+        <div class="compass" aria-hidden="true">
+          <span class="compass-ring"></span>
+          <span class="compass-needle"></span>
+          <span class="compass-letter n">N</span>
+          <span class="compass-letter e">E</span>
+          <span class="compass-letter s">S</span>
+          <span class="compass-letter w">W</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="crew" id="crew" aria-labelledby="crew-title">
+      <div class="crew-head">
+        <div>
+          <p class="eyebrow">The crew on deck</p>
+          <h2 id="crew-title">Two brothers, one Grand Line</h2>
+        </div>
+        <p class="crew-lede">Luffy runs on instinct and meat. Ace runs on fire and nerve. Both are here for the play-money thrill — and both would probably bet the ship.</p>
+      </div>
+
+      <div class="crew-grid">
+        <article class="crew-card crew-luffy">
+          <div class="crew-art"><img src="assets/luffy-manga.jpg" alt="Illustration of Monkey D. Luffy" width="736" height="736" loading="lazy" decoding="async" /></div>
+          <div class="crew-body">
+            <p class="crew-role">Captain · Straw Hat Pirates</p>
+            <h3>Monkey D. Luffy</h3>
+            <p class="crew-quote">“I'm gonna be King of the Pirates!”</p>
+            <p class="crew-copy">Never folds, never stops at one plate, and treats every spin like the start of an adventure. His straw hat is already on the reels.</p>
+            <div class="crew-meta">
+              <span class="crew-bounty"><span>Bounty</span><strong>฿3,000,000,000</strong></span>
+              <a class="crew-link" href="#games" data-jump="slots">Take Luffy's seat <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="crew-card crew-ace">
+          <div class="crew-art"><img src="assets/ace-manga.jpg" alt="Illustration of Portgas D. Ace" width="736" height="595" loading="lazy" decoding="async" /></div>
+          <div class="crew-body">
+            <p class="crew-role">Commander · Whitebeard Pirates</p>
+            <h3>Portgas D. Ace</h3>
+            <p class="crew-quote">“Thanks for the meal!”</p>
+            <p class="crew-copy">Brings the heat to the high-stakes table and never backs down from a challenge. Dig fast, cash out faster — that's the Fire Fist way.</p>
+            <div class="crew-meta">
+              <span class="crew-bounty"><span>Bounty</span><strong>฿550,000,000</strong></span>
+              <a class="crew-link" href="#games" data-jump="mines">Take Ace's seat <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="games" id="games">
+      <div class="section-head">
+        <p class="eyebrow">Choose your adventure</p>
+        <h2>Four seas of fortune</h2>
+        <p class="section-sub">Every game runs on Berries from your chest. Win big, lose it all, or claim a daily bounty to get back on deck.</p>
+      </div>
+
+      <div class="tabbar" role="tablist" aria-label="Casino games">
+        <button class="tab active" id="tab-slots" role="tab" aria-selected="true" aria-controls="panel-slots" data-game="slots">
+          <span class="tab-icon" aria-hidden="true">🎰</span> Devil Fruit Slots
+        </button>
+        <button class="tab" id="tab-blackjack" role="tab" aria-selected="false" aria-controls="panel-blackjack" data-game="blackjack" tabindex="-1">
+          <span class="tab-icon" aria-hidden="true">🃏</span> Blackjack
+        </button>
+        <button class="tab" id="tab-roulette" role="tab" aria-selected="false" aria-controls="panel-roulette" data-game="roulette" tabindex="-1">
+          <span class="tab-icon" aria-hidden="true">🎡</span> Roulette
+        </button>
+        <button class="tab" id="tab-mines" role="tab" aria-selected="false" aria-controls="panel-mines" data-game="mines" tabindex="-1">
+          <span class="tab-icon" aria-hidden="true">💎</span> Bounty Mines
+        </button>
+      </div>
+
+      <div class="panels">
+        <!-- ================= SLOTS ================= -->
+        <section class="panel active" id="panel-slots" role="tabpanel" aria-labelledby="tab-slots">
+          <div class="game-grid">
+            <div class="machine">
+              <div class="machine-lights" aria-hidden="true"></div>
+              <div class="machine-title">Devil Fruit Slots</div>
+              <div class="reel-window">
+                <div class="reel" id="reel-0"><span class="reel-sym">🍒</span></div>
+                <div class="reel" id="reel-1"><span class="reel-sym">⚓</span></div>
+                <div class="reel" id="reel-2"><span class="reel-sym">👒</span></div>
+                <div class="payline" id="slots-payline" aria-hidden="true"></div>
+              </div>
+              <p class="table-msg machine-msg" id="slots-msg" aria-live="polite">Match three symbols on the golden payline to plunder the payout.</p>
+              <div class="history-strip" id="slots-history" aria-label="Recent slot results"></div>
+              <div class="machine-base">
+                <span class="bulb" aria-hidden="true"></span>
+                <span>Straw Hat luck to ya</span>
+                <span class="bulb" aria-hidden="true"></span>
+              </div>
+            </div>
+
+            <aside class="game-side">
+              <h3>Devil Fruit Slots</h3>
+              <p class="side-copy">Three of a kind on the payline pays the tier. Any pair pays 0.5×. The skull, the chest and the pirate flag are where the real treasure hides. Luffy's straw hat is already on the reels, and he never passes up a spin.</p>
+
+              <div class="bet-box">
+                <div class="bet-head"><span>Bet per spin</span><strong><span id="slots-bet">50</span> ฿</strong></div>
+                <div class="chips" id="slots-chips">
+                  <button type="button" data-chip="10" aria-pressed="false">10</button>
+                  <button type="button" data-chip="25" aria-pressed="false">25</button>
+                  <button type="button" data-chip="50" aria-pressed="false" class="active">50</button>
+                  <button type="button" data-chip="100" aria-pressed="false">100</button>
+                  <button type="button" data-chip="250" aria-pressed="false">250</button>
+                  <button type="button" data-chip="500" aria-pressed="false">500</button>
+                </div>
+              </div>
+
+              <button class="btn btn-gold btn-block btn-lg" id="slots-spin" type="button">Spin the reels <span aria-hidden="true">🎰</span></button>
+              <div class="paytable" id="slots-paytable"></div>
+              <p class="fine">Top prize 900× your bet. Simulated RTP ≈ 96%.</p>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ================= BLACKJACK ================= -->
+        <section class="panel" id="panel-blackjack" role="tabpanel" aria-labelledby="tab-blackjack">
+          <div class="game-grid">
+            <div class="felt" id="bj-table">
+              <div class="felt-rail" aria-hidden="true"></div>
+              <div class="felt-brand" aria-hidden="true">Grand Line · Blackjack</div>
+
+              <div class="bj-row">
+                <div class="hand-meta"><span>Dealer</span><span class="hand-value" id="bj-dealer-value">—</span></div>
+                <div class="cards" id="bj-dealer-cards" aria-label="Dealer hand"></div>
+              </div>
+
+              <div class="felt-divider" aria-hidden="true"><span>♠</span><span>♥</span><span>♦</span><span>♣</span></div>
+
+              <div class="bj-row">
+                <div class="cards" id="bj-player-cards" aria-label="Your hand"></div>
+                <div class="hand-meta"><span>You</span><span class="hand-value" id="bj-player-value">—</span></div>
+              </div>
+
+              <p class="table-msg" id="bj-msg" aria-live="polite">Set your bet and deal the cards, captain.</p>
+              <div class="history-strip" id="bj-history" aria-label="Recent blackjack results"></div>
+            </div>
+
+            <aside class="game-side">
+              <h3>The Red-Hair Table</h3>
+              <p class="side-copy">Beat the dealer to 21. Blackjack pays 3:2, the dealer stands on all 17s, and you can double down on your first two cards.</p>
+
+              <div class="bet-box">
+                <div class="bet-head"><span>Bet</span><strong><span id="bj-bet">100</span> ฿</strong></div>
+                <div class="chips" id="bj-chips">
+                  <button type="button" data-chip="10" aria-pressed="false">10</button>
+                  <button type="button" data-chip="25" aria-pressed="false">25</button>
+                  <button type="button" data-chip="50" aria-pressed="false">50</button>
+                  <button type="button" data-chip="100" aria-pressed="false" class="active">100</button>
+                  <button type="button" data-chip="250" aria-pressed="false">250</button>
+                  <button type="button" data-chip="500" aria-pressed="false">500</button>
+                </div>
+              </div>
+
+              <div class="btn-grid">
+                <button class="btn btn-gold" id="bj-deal" type="button">Deal</button>
+                <button class="btn btn-soft" id="bj-hit" type="button" disabled>Hit</button>
+                <button class="btn btn-soft" id="bj-stand" type="button" disabled>Stand</button>
+                <button class="btn btn-soft" id="bj-double" type="button" disabled>Double</button>
+              </div>
+
+              <div class="mini-stats">
+                <span>Wins <b id="bj-wins">0</b></span>
+                <span>Losses <b id="bj-losses">0</b></span>
+                <span>Pushes <b id="bj-pushes">0</b></span>
+              </div>
+              <p class="fine">Session record resets when you weigh anchor.</p>
+            </aside>
+          </div>
+        </section>
+
+        <!-- ================= ROULETTE ================= -->
+        <section class="panel" id="panel-roulette" role="tabpanel" aria-labelledby="tab-roulette">
+          <div class="roulette-layout">
+            <div class="roulette-side">
+              <div class="wheel-stage">
+                <div class="wheel-pointer" aria-hidden="true"></div>
+                <div class="wheel" id="roulette-wheel">
+                  <div class="wheel-labels" id="wheel-labels" aria-hidden="true"></div>
+                  <div class="wheel-hub" aria-hidden="true">☠</div>
+                </div>
+              </div>
+              <div class="roulette-result" id="roulette-result" aria-live="polite">Place your bets</div>
+              <div class="history-strip roulette-history" id="roulette-history" aria-label="Recent roulette results"></div>
+              <div class="roulette-actions">
+                <button class="btn btn-gold" id="roulette-spin" type="button">Spin the wheel</button>
+                <button class="btn btn-ghost" id="roulette-clear" type="button">Clear bets</button>
+              </div>
+              <p class="fine">European wheel, single zero. Straight-up numbers pay 35:1.</p>
+            </div>
+
+            <div class="roulette-main">
+              <div class="bet-box roulette-betbox">
+                <div class="bet-head"><span>Bet total</span><strong><span id="roulette-total">0</span> ฿</strong></div>
+                <div class="chips" id="roulette-chips">
+                  <button type="button" data-chip="10" aria-pressed="false">10</button>
+                  <button type="button" data-chip="25" aria-pressed="false" class="active">25</button>
+                  <button type="button" data-chip="50" aria-pressed="false">50</button>
+                  <button type="button" data-chip="100" aria-pressed="false">100</button>
+                  <button type="button" data-chip="250" aria-pressed="false">250</button>
+                  <button type="button" data-chip="500" aria-pressed="false">500</button>
+                </div>
+                <p class="fine">Pick a chip, then tap the table to stack bets. Tap a zone again to add more.</p>
+              </div>
+              <div class="roulette-board-scroll">
+                <div class="roulette-board" id="roulette-board"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= MINES ================= -->
+        <section class="panel" id="panel-mines" role="tabpanel" aria-labelledby="tab-mines">
+          <div class="game-grid">
+            <div class="mines-board-wrap">
+              <div class="mines-top">
+                <div><span class="mines-label">Current multiplier</span><strong id="mines-mult">1.00×</strong></div>
+                <div><span class="mines-label">Chests found</span><strong id="mines-picks">0 / 18</strong></div>
+                <div><span class="mines-label">Next pick</span><strong id="mines-next">1.10×</strong></div>
+              </div>
+              <div class="mines-grid" id="mines-grid"></div>
+              <p class="table-msg" id="mines-msg" aria-live="polite">Set a stake, then dig for treasure. Three Marine mines are hiding in the field.</p>
+              <div class="history-strip" id="mines-history" aria-label="Recent mines results"></div>
+            </div>
+
+            <aside class="game-side">
+              <h3>Bounty Hunter</h3>
+              <p class="side-copy">A 5×5 treasure field hides three Marine mines. Open chests to raise your multiplier, then cash out before the Marines catch you. Open 18 tiles for the full 64× prize. Ace would tell you to dig fast and cash out faster.</p>
+
+              <div class="bet-box">
+                <div class="bet-head"><span>Stake</span><strong><span id="mines-bet">100</span> ฿</strong></div>
+                <div class="chips" id="mines-chips">
+                  <button type="button" data-chip="10" aria-pressed="false">10</button>
+                  <button type="button" data-chip="25" aria-pressed="false">25</button>
+                  <button type="button" data-chip="50" aria-pressed="false">50</button>
+                  <button type="button" data-chip="100" aria-pressed="false" class="active">100</button>
+                  <button type="button" data-chip="250" aria-pressed="false">250</button>
+                  <button type="button" data-chip="500" aria-pressed="false">500</button>
+                </div>
+              </div>
+
+              <button class="btn btn-gold btn-block btn-lg" id="mines-start" type="button">Start digging</button>
+              <button class="btn btn-soft btn-block" id="mines-cashout" type="button" disabled>Cash out</button>
+              <p class="fine">House edge ≈ 3%. The multiplier is locked in when you cash out.</p>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark small" aria-hidden="true">☠</span>
+        <div>
+          <strong>Grand Line Casino</strong>
+          <p>A One Piece fan project. Not affiliated with Eiichiro Oda, Shueisha, Toei Animation, or any official One Piece product. Luffy and Ace appear in character images sourced from Pinterest and used here for a non-commercial fan tribute; One Piece and its characters remain the property of their respective rights holders.</p>
+        </div>
+      </div>
+      <p class="footer-legal"><strong>Play money only.</strong> All Berries are fictional. There are no purchases, no cash prizes, and no real-world gambling. If gambling stops being fun in real life, seek support — in the US, call or text 1-800-GAMBLER.</p>
+    </div>
+    <div class="footer-bottom">
+      <span>Made with salt water and questionable decisions.</span>
+      <button class="link-btn" id="reset-btn" type="button">Reset voyage</button>
+    </div>
+  </footer>
+
+  <dialog class="modal" id="how-modal" aria-labelledby="how-title">
+    <div class="modal-head">
+      <div>
+        <p class="eyebrow">Captain's handbook</p>
+        <h2 id="how-title">How to play</h2>
+      </div>
+      <button class="icon-btn modal-close" type="button" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="rule-grid">
+        <article>
+          <h4>🎰 Devil Fruit Slots</h4>
+          <p>Pick a bet and spin. Three matching symbols pay the tier; any pair pays 0.5×. The pirate flag triple pays 900×.</p>
+        </article>
+        <article>
+          <h4>🃏 Blackjack</h4>
+          <p>Get closer to 21 than the dealer without busting. Blackjack pays 3:2. Dealer stands on 17. Double on your first two cards.</p>
+        </article>
+        <article>
+          <h4>🎡 Roulette</h4>
+          <p>Select a chip, then tap the table. Outside bets pay even money, dozens pay 2:1, and single numbers pay 35:1.</p>
+        </article>
+        <article>
+          <h4>💎 Bounty Mines</h4>
+          <p>Open tiles to grow your multiplier. Avoid the three mines. Cash out any time — or clear 18 chests for the 64× prize.</p>
+        </article>
+      </div>
+      <div class="rule-note">
+        <span aria-hidden="true">🪙</span>
+        <p>New captains start with <strong>5,000 ฿</strong>. Claim a daily bounty of <strong>1,000 ฿</strong>, and if you're ever shipwrecked below 100 ฿, you can claim an emergency 500 ฿. Progress is stored in your browser.</p>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-gold" type="button" data-close>Back to the tables</button>
+      <button class="link-btn" type="button" data-close>Close</button>
+    </div>
+  </dialog>
+
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="false"></div>
+  <div id="fx-layer" class="fx-layer" aria-hidden="true"></div>
+
+  <script src="js/core.js"></script>
+  <script src="js/slots.js"></script>
+  <script src="js/blackjack.js"></script>
+  <script src="js/roulette.js"></script>
+  <script src="js/mines.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
