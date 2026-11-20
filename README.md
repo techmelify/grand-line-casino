@@ -44,5 +44,6 @@ js/main.js          Tabs, modal, ambient bubbles, bootstrapping
 ## Notes
 
 - The page is designed to work from the filesystem, so no server is required. Google Fonts are loaded from the network; offline it falls back to serif/system fonts.
+- Pushes to `main` on GitHub are deployed automatically to Vercel.
 - Berries are fictional and progress lives only in your browser. Use **Reset voyage** in the footer to start over.
 - This is an unofficial fan project. Not affiliated with Eiichiro Oda, Shueisha, Toei Animation, or any official One Piece product. No purchases, no cash prizes, no real gambling.
